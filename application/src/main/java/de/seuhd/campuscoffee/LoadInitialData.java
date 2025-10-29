@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Load initial data into the list via the list service from the business layer.
+ * Component that loads initial data into the application when running in the "dev" profile.
  */
 @Component
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ class LoadInitialData implements InitializingBean {
         log.info("Deleting existing data...");
         posService.clear();
         log.info("Loading initial data...");
-        List<Pos> posList = TestFixtures.createPos(posService);
+        List<Pos> posList = TestFixtures.createPosFixtures(posService);
         log.info("Created {} POS.", posList.size());
         log.info("Initial data loaded successfully.");
     }

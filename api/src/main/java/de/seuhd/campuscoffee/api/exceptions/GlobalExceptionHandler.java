@@ -36,16 +36,7 @@ public class GlobalExceptionHandler {
             WebRequest request
     ) {
         log.warn("Resource not found: {}", exception.getMessage());
-
-        ErrorResponse error = ErrorResponse.builder()
-                .message(exception.getMessage())
-                .statusCode(HttpStatus.NOT_FOUND.value())
-                .statusMessage(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .path(extractPath(request))
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return buildErrorResponse(exception, HttpStatus.NOT_FOUND, request);
     }
 
     /**
@@ -64,16 +55,7 @@ public class GlobalExceptionHandler {
             WebRequest request
     ) {
         log.warn("Duplicate resource: {}", exception.getMessage());
-
-        ErrorResponse error = ErrorResponse.builder()
-                .message(exception.getMessage())
-                .statusCode(HttpStatus.CONFLICT.value())
-                .statusMessage(HttpStatus.CONFLICT.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .path(extractPath(request))
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return buildErrorResponse(exception, HttpStatus.CONFLICT, request);
     }
 
     /**
@@ -90,16 +72,7 @@ public class GlobalExceptionHandler {
             WebRequest request
     ) {
         log.warn("Invalid argument: {}", exception.getMessage());
-
-        ErrorResponse error = ErrorResponse.builder()
-                .message(exception.getMessage())
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .statusMessage(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .path(extractPath(request))
-                .build();
-
-        return ResponseEntity.badRequest().body(error);
+        return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
     }
 
     /**
@@ -116,16 +89,51 @@ public class GlobalExceptionHandler {
             WebRequest request
     ) {
         log.error("Unexpected error occurred", exception);
+        return buildErrorResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, request,
+                "An unexpected error occurred.");
+    }
 
+    /**
+     * Builds a standardized error response using the exception message.
+     *
+     * @param exception the exception that was thrown
+     * @param status the HTTP status to return
+     * @param request the web request
+     * @return ResponseEntity with ErrorResponse and the specified HTTP status
+     */
+    private ResponseEntity<ErrorResponse> buildErrorResponse(
+            Exception exception,
+            HttpStatus status,
+            WebRequest request
+    ) {
+        return buildErrorResponse(exception, status, request, exception.getMessage());
+    }
+
+    /**
+     * Builds a standardized error response with a custom message.
+     *
+     * @param exception the exception that was thrown
+     * @param status the HTTP status to return
+     * @param request the web request
+     * @param message custom error message (overrides exception message).
+     * @return ResponseEntity with ErrorResponse and the specified HTTP status
+     */
+    private ResponseEntity<ErrorResponse> buildErrorResponse(
+            Exception exception,
+            HttpStatus status,
+            WebRequest request,
+            String message
+    ) {
         ErrorResponse error = ErrorResponse.builder()
-                .message("An unexpected error occurred.")
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .statusMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .errorCode(exception.getClass().getSimpleName())
+                .message(message)
+                .statusCode(status.value())
+                .statusMessage(status.getReasonPhrase())
                 .timestamp(LocalDateTime.now())
                 .path(extractPath(request))
                 .build();
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
     /**

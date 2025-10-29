@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 /**
- * Main class to start the Spring Boot application in production.
+ * Main class to start the Spring Boot application .
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan

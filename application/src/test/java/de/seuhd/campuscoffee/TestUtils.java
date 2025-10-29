@@ -10,6 +10,10 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+/**
+ * Utility class for system tests.
+ * Provides methods to manage PostgreSQL testcontainers and perform common API operations.
+ */
 public class TestUtils {
     @SuppressWarnings("resource")
     public static PostgreSQLContainer<?> getPostgresContainer() {
@@ -57,7 +61,7 @@ public class TestUtils {
                         .when()
                         .post("/api/pos")
                         .then()
-                        .statusCode(200)
+                        .statusCode(201)
                         .extract().as(PosDto.class)
                 )
                 .toList();

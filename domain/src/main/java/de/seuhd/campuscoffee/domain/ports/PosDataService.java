@@ -7,7 +7,7 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 /**
- * Interface for the implementation of the POS data service that the domain layer provides as a port.
+ * Interface for the implementation of the POS data service that the data layer provides as a port.
  */
 public interface PosDataService {
     void clear();

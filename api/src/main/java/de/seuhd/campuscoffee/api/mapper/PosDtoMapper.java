@@ -5,6 +5,9 @@ import de.seuhd.campuscoffee.domain.model.Pos;
 import org.mapstruct.Mapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
+/**
+ * Mapper for POS DTOs and domain objects.
+ */
 @Mapper(componentModel = "spring")
 @ConditionalOnMissingBean // prevent IntelliJ warning about duplicate beans
 public interface PosDtoMapper {

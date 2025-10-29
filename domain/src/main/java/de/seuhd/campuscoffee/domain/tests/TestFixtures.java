@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Test fixtures for POS entities.
+ */
 public class TestFixtures {
     private static final LocalDateTime DATE_TIME = LocalDateTime.of(2025, 10, 29, 12, 0, 0);
 
@@ -24,14 +27,14 @@ public class TestFixtures {
                 .toList();
     }
 
-    public static List<Pos> getPosListForInsertion() {
+    public static List<Pos> getPosFixturesForInsertion() {
         return getPosList().stream()
                 .map(user -> user.toBuilder().id(null).createdAt(null).updatedAt(null).build())
                 .toList();
     }
 
-    public static List<Pos> createPos(PosService posService) {
-        return getPosListForInsertion().stream()
+    public static List<Pos> createPosFixtures(PosService posService) {
+        return getPosFixturesForInsertion().stream()
                 .map(posService::upsert)
                 .collect(Collectors.toList());
     }

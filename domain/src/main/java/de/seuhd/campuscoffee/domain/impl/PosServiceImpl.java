@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the POS service that handles business logic related to POS entities.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -66,8 +69,7 @@ public class PosServiceImpl implements PosService {
     }
 
     /**
-     * Updates an existing POS. Handles business rules for update:
-     * - Validates POS exists
+     * Updates an existing POS. Handles business rules for update (validates that POS exists).
      * Note: Name uniqueness is enforced by database constraint (translated by data layer)
      * Note: Update timestamp is set by JPA lifecycle callback in the entity
      */

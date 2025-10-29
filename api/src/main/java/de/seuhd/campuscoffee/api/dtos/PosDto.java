@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 /**
  * DTO for POS metadata.
- *
  */
 @Data
 @Builder(toBuilder = true)

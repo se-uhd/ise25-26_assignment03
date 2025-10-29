@@ -46,7 +46,7 @@ class PosDataServiceImpl implements PosDataService {
     public Pos getById(@NonNull Long id) throws PosNotFoundException {
         return posRepository.findById(id)
                 .map(posEntityMapper::fromEntity)
-                .orElseThrow(() -> new PosNotFoundException("POS with ID " + id + " does not exist."));
+                .orElseThrow(() -> new PosNotFoundException(id));
     }
 
     @Override
@@ -63,7 +63,7 @@ class PosDataServiceImpl implements PosDataService {
 
             // Update existing POS
             PosEntity posEntity = posRepository.findById(pos.getId())
-                    .orElseThrow(() -> new PosNotFoundException("POS with ID " + pos.getId() + " does not exist."));
+                    .orElseThrow(() -> new PosNotFoundException(pos.getId()));
 
             // Map incoming data to entity
             PosEntity mappedPosEntity = posEntityMapper.toEntity(pos);
@@ -89,8 +89,7 @@ class PosDataServiceImpl implements PosDataService {
             // Translate database constraint violations to domain exceptions
             // This is the adapter's responsibility in hexagonal architecture
             if (e.getMessage() != null && e.getMessage().contains("pos_name_key")) {
-                throw new DuplicatePosNameException(
-                        "POS with name '" + pos.getName() + "' already exists.");
+                throw new DuplicatePosNameException(pos.getName());
             }
             // Re-throw if it's a different constraint violation
             throw e;

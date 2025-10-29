@@ -5,7 +5,7 @@ package de.seuhd.campuscoffee.domain.exceptions;
  * This represents a business rule violation: POS names must be unique.
  */
 public class DuplicatePosNameException extends RuntimeException {
-    public DuplicatePosNameException(String message) {
-        super(message);
+    public DuplicatePosNameException(String posName) {
+        super("POS with name '" + posName + "' already exists.");
     }
 }

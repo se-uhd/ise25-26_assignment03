@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * Domain class that stores the POS metadata.
+ * Domain class that stores the POS (Point of Sale) metadata.
  */
 @Data
 @Builder(toBuilder = true)

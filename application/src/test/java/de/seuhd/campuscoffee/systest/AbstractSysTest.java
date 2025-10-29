@@ -15,6 +15,10 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import static de.seuhd.campuscoffee.TestUtils.configurePostgresContainers;
 import static de.seuhd.campuscoffee.TestUtils.getPostgresContainer;
 
+/**
+ * Abstract base class for system tests.
+ * Sets up the Spring Boot test context, manages the PostgreSQL testcontainer, and configures REST Assured.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractSysTest {
     protected static final PostgreSQLContainer<?> postgresContainer;

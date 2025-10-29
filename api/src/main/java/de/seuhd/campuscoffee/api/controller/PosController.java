@@ -7,9 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
+/**
+ * Controller for handling POS-related API requests.
+ */
 @Controller
 @RequestMapping("/api/pos")
 @RequiredArgsConstructor
@@ -37,7 +42,10 @@ public class PosController {
     @PostMapping("")
     public ResponseEntity<PosDto> create(
             @RequestBody PosDto posDto) {
-        return upsert(posDto);
+        PosDto created = upsert(posDto);
+        return ResponseEntity
+                .created(getLocation(created.getId()))
+                .body(created);
     }
 
     @PutMapping("/{id}")
@@ -47,16 +55,32 @@ public class PosController {
         if (!id.equals(posDto.getId())) {
             throw new IllegalArgumentException("POS ID in path and body do not match.");
         }
-        return upsert(posDto);
+        return ResponseEntity.ok(upsert(posDto));
     }
 
-    private ResponseEntity<PosDto> upsert(PosDto posDto) {
-        return ResponseEntity.ok(
-                posDtoMapper.fromDomain(
-                        posService.upsert(
-                                posDtoMapper.toDomain(posDto)
-                        )
+    /**
+     * Common upsert logic for create and update.
+     *
+     * @param posDto the POS DTO to map and upsert
+     * @return the upserted POS mapped back to the DTO format.
+     */
+    private PosDto upsert(PosDto posDto) {
+        return posDtoMapper.fromDomain(
+                posService.upsert(
+                        posDtoMapper.toDomain(posDto)
                 )
         );
+    }
+
+    /**
+     * Builds the location URI for a newly created resource.
+     * @param resourceId the ID of the created resource
+     * @return the location URI
+     */
+    private URI getLocation(Long resourceId) {
+        return ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(resourceId)
+                .toUri();
     }
 }

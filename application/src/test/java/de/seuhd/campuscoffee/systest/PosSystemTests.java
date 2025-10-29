@@ -8,11 +8,14 @@ import java.util.List;
 import de.seuhd.campuscoffee.TestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * System tests for the operations related to POS (Point of Sale).
+ */
 public class PosSystemTests extends AbstractSysTest {
 
     @Test
     void createPos() {
-        Pos posToCreate = TestFixtures.getPosListForInsertion().getFirst();
+        Pos posToCreate = TestFixtures.getPosFixturesForInsertion().getFirst();
         Pos createdPos = posDtoMapper.toDomain(TestUtils.createPos(List.of(posDtoMapper.fromDomain(posToCreate))).getFirst());
 
         assertThat(createdPos)
@@ -23,7 +26,7 @@ public class PosSystemTests extends AbstractSysTest {
 
     @Test
     void getAllCreatedPos() {
-        List<Pos> createdPosList = TestFixtures.createPos(posService);
+        List<Pos> createdPosList = TestFixtures.createPosFixtures(posService);
 
         List<Pos> retrievedPos = TestUtils.retrievePos()
                 .stream()
@@ -37,7 +40,7 @@ public class PosSystemTests extends AbstractSysTest {
 
     @Test
     void getPosById() {
-        List<Pos> createdPosList = TestFixtures.createPos(posService);
+        List<Pos> createdPosList = TestFixtures.createPosFixtures(posService);
         Pos createdPos = createdPosList.getFirst();
 
         Pos retrievedPos = posDtoMapper.toDomain(
@@ -52,7 +55,7 @@ public class PosSystemTests extends AbstractSysTest {
 
     @Test
     void updatePos() {
-        List<Pos> createdPosList = TestFixtures.createPos(posService);
+        List<Pos> createdPosList = TestFixtures.createPosFixtures(posService);
         Pos posToUpdate = createdPosList.getFirst();
 
         // Update fields
@@ -69,8 +72,8 @@ public class PosSystemTests extends AbstractSysTest {
         // Verify changes persist
         Pos retrievedPos = posDtoMapper.toDomain(TestUtils.retrievePosById(posToUpdate.getId()));
 
-        // break test case
-        //posToUpdate.setName("different name");
+        // Break test case
+        posToUpdate.setName("THIS STRING BREAKS THE TEST");
 
         assertThat(retrievedPos)
                 .usingRecursiveComparison()

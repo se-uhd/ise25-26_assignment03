@@ -1,7 +1,9 @@
 package de.seuhd.campuscoffee.api.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -11,10 +13,19 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL) // excludes null fields from JSON
 public class ErrorResponse {
+    /**
+     * Machine-readable error code based on exception class name (e.g., PosNotFoundException).
+     * Enables clients to handle specific error types programmatically.
+     */
+    @NonNull
+    private String errorCode;
+
     /**
      * Human-readable error message.
      */
+    @NonNull
     private String message;
 
     /**
